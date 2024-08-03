@@ -21,7 +21,7 @@ services:
     image: mysql:5.7
     environment:
       MYSQL_ROOT_PASSWORD: ""   # Empty password for root user
-      MYSQL_DATABASE: my_database
+      MYSQL_DATABASE: ccps610
       MYSQL_USER: user
       MYSQL_PASSWORD: password
     ports:
