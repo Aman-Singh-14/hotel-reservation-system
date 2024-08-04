@@ -3,7 +3,7 @@ version: '3.8'
 services:
   frontend:
     build:
-      context: ./hotel-reservation
+      context: ./frontend
     ports:
       - "3000:3000"
     depends_on:
