@@ -216,6 +216,26 @@ app.post('/guests', (req, res) => {
     });
   });
 
+  // Fetch all service requests
+app.get('/service-requests', (req, res) => {
+  const { sortBy, sortDirection } = req.query;
+  const orderBy = sortBy ? `ORDER BY ${sortBy} ${sortDirection || 'ASC'}` : '';
+  
+  const query = `SELECT sr.ServiceRequestID, s.ServiceName, st.StaffName, sr.RoomID, sr.RequestDateTime
+    FROM ServiceRequest sr
+    JOIN Service s ON sr.ServiceID = s.ServiceID
+    JOIN Staff st ON sr.StaffAssignedID = st.StaffID
+    ${orderBy}
+  `;
+
+  db.query(query, (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    res.json(results);
+  });
+});
+
 // Start server
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
