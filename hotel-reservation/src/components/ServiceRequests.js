@@ -84,7 +84,9 @@ const ServiceRequestList = () => {
       <table>
         <thead>
           <tr>
-            <th>Service Request ID</th>
+            <th onClick={() => handleSort('ServiceRequestID')} style={{ cursor: 'pointer' }}>
+            Service Request ID {sortConfig.key === 'ServiceRequestID' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+            </th>
             <th onClick={() => handleSort('RoomID')} style={{ cursor: 'pointer' }}>
               Room Number {sortConfig.key === 'RoomID' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
             </th>
