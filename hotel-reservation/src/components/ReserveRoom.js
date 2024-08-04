@@ -4,7 +4,6 @@ import '../App.css';
 
 const ReserveRoom = () => {
   const [guests, setGuests] = useState([]);
-  const [rooms, setRooms] = useState([]);
   const [availableRooms, setAvailableRooms] = useState([]);
   const [reservation, setReservation] = useState({
     GuestID: '',

@@ -11,7 +11,7 @@ app.use(express.json());
 
 // Create MySQL connection
 const db = mysql.createConnection({
-  host: 'localhost',
+  host: 'db',
   user: 'root',
   password: '',
   database: 'ccps610'
@@ -40,7 +40,7 @@ app.get('/reservations', (req, res) => {
 app.post('/reservations', (req, res) => {
     const { ReservationID, GuestID, RoomNumber, CheckInDate, CheckOutDate } = req.body;
   
-    const query = 'INSERT INTO Reservation (ReservationID, GuestID, RoomNumber, CheckInDate, CheckOutDate) VALUES (?, ?, ?, ?, ?)';
+    const query = 'call ccps610.add_reservation(?, ?, ?, ?, ?);';
     db.query(query, [ReservationID, GuestID, RoomNumber, CheckInDate, CheckOutDate], (err, results) => {
       if (err) {
         return res.status(500).json({ error: err.message });
@@ -57,11 +57,7 @@ app.put('/reservations/:id', (req, res) => {
       return res.status(400).json({ error: 'All fields are required' });
     }
   
-    const query = `
-      UPDATE Reservation
-      SET GuestID = ?, RoomNumber = ?, CheckInDate = ?, CheckOutDate = ?
-      WHERE ReservationID = ?
-    `;
+    const query = 'call ccps610.edit_reservation(?, ?, ?, ?, ?)';
   
     db.query(query, [GuestID, RoomNumber, CheckInDate, CheckOutDate, reservationId], (err, result) => {
       if (err) {
@@ -86,7 +82,7 @@ app.get('/staff', (req, res) => {
 app.delete('/staff/:id', (req, res) => {
     const staffId = req.params.id;
     
-    const query = 'DELETE FROM Staff WHERE StaffID = ?';
+    const query = 'call ccps610.fire_staff(?)';
     db.query(query, [staffId], (err, results) => {
       if (err) {
         return res.status(500).json({ error: err.message });
@@ -99,7 +95,7 @@ app.delete('/staff/:id', (req, res) => {
 app.post('/staff', (req, res) => {
     const { StaffName, Position, ContactInfo } = req.body;
     
-    const query = 'INSERT INTO Staff (StaffName, Position, ContactInfo) VALUES (?, ?, ?)';
+    const query = 'call ccps610.hire_staff(?, ?, ?)';
     db.query(query, [StaffName, Position, ContactInfo], (err, results) => {
       if (err) {
         return res.status(500).json({ error: err.message });
@@ -166,7 +162,7 @@ app.post('/rooms', (req, res) => {
     const { RoomNumber, RoomCat, Capacity, Status, Price } = req.body;
   
     // Insert new room into the database
-    const query = 'INSERT INTO Room (RoomNumber, RoomCat, Capacity, Status, Price) VALUES (?, ?, ?, ?, ?)';
+    const query = 'call ccps610.add_room(?, ?, ?, ?, ?)';
     db.query(query, [RoomNumber, RoomCat, Capacity, Status, Price], (err, results) => {
       if (err) {
         return res.status(500).json({ error: err.message });
@@ -199,11 +195,7 @@ app.get('/customers', (req, res) => {
 app.put('/customers/:id', (req, res) => {
     const { id } = req.params;
     const { FirstName, LastName, ContactNumber, Email } = req.body;
-    const sql = `
-      UPDATE Guest
-      SET FirstName = ?, LastName = ?, ContactNumber = ?, Email = ?
-      WHERE GuestID = ?
-    `;
+    const sql = 'call ccps610.edit_guest(?, ?, ?, ?, ?)';
     db.query(sql, [FirstName, LastName, ContactNumber, Email, id], (err, result) => {
       if (err) {
         return res.status(500).json({ error: err.message });
@@ -221,7 +213,7 @@ app.post('/guests', (req, res) => {
       return res.status(400).json({ error: 'All fields are required' });
     }
   
-    const query = 'INSERT INTO Guest (FirstName, LastName, ContactNumber, Email) VALUES (?, ?, ?, ?)';
+    const query = 'call ccps610.add_guest(?, ?, ?, ?)';
     const values = [FirstName, LastName, ContactNumber, Email];
   
     db.query(query, values, (err, results) => {
@@ -231,7 +223,24 @@ app.post('/guests', (req, res) => {
       res.status(201).json({ message: 'Guest added successfully', guestId: results.insertId });
     });
   });
+
+  // Fetch all service requests
+app.get('/service-requests', (req, res) => {
+  const query = `
+    SELECT sr.ServiceRequestID, sr.RoomID, s.ServiceName, st.StaffName, sr.RequestDateTime
+    FROM ServiceRequest sr
+    JOIN Service s ON sr.ServiceID = s.ServiceID
+    JOIN Staff st ON sr.StaffAssignedID = st.StaffID
+  `;
   
+  db.query(query, (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    res.json(results);
+  });
+});
+
 // Start server
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);

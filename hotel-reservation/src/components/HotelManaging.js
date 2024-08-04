@@ -4,6 +4,7 @@ import ReservationList from './ReservationList';
 import AvailableRooms from './AvailableRooms';
 import CustomerList from './CustomerList';
 import '../App.css';
+import ServiceRequests from './ServiceRequests';
 
 const HotelMenu = () => {
   const [activeTab, setActiveTab] = useState('reservations');
@@ -30,12 +31,19 @@ const HotelMenu = () => {
         >
           Customers
         </button>
+        <button
+          className={activeTab === 'serviceRequests' ? 'active' : ''}
+          onClick={() => setActiveTab('serviceRequests')}
+        >
+          Service Requests
+        </button>
       </div>
 
       <div className="tab-content">
         {activeTab === 'reservations' && <ReservationList />}
         {activeTab === 'availableRooms' && <AvailableRooms />}
         {activeTab === 'customers' && <CustomerList />}
+        {activeTab === 'serviceRequests' && <ServiceRequests />}
       </div>
     </div>
   );
