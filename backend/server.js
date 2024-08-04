@@ -108,15 +108,7 @@ app.post('/staff', (req, res) => {
 app.get('/available-rooms', (req, res) => {
     const { checkInDate, checkOutDate } = req.query;
   
-    const query = `
-      SELECT RoomNumber, Status
-      FROM Room
-      WHERE RoomNumber NOT IN (
-        SELECT RoomNumber
-        FROM Reservation
-        WHERE (CheckInDate <= ? AND CheckOutDate >= ?)
-      )
-    `;
+    const query = `call available_rooms(?,?)`;
   
     db.query(query, [checkOutDate, checkInDate], (err, results) => {
       if (err) {
@@ -223,23 +215,6 @@ app.post('/guests', (req, res) => {
       res.status(201).json({ message: 'Guest added successfully', guestId: results.insertId });
     });
   });
-
-  // Fetch all service requests
-app.get('/service-requests', (req, res) => {
-  const query = `
-    SELECT sr.ServiceRequestID, sr.RoomID, s.ServiceName, st.StaffName, sr.RequestDateTime
-    FROM ServiceRequest sr
-    JOIN Service s ON sr.ServiceID = s.ServiceID
-    JOIN Staff st ON sr.StaffAssignedID = st.StaffID
-  `;
-  
-  db.query(query, (err, results) => {
-    if (err) {
-      return res.status(500).json({ error: err.message });
-    }
-    res.json(results);
-  });
-});
 
 // Start server
 app.listen(port, () => {
