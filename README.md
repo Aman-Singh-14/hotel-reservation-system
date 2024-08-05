@@ -5,9 +5,11 @@
 This project includes a hotel management system with a front-end built in React, a back-end with Node.js, and a MySQL database. 
 The entire setup is containerized using Docker for easy deployment and sharing.
 
-Use Cases and Testing: @Aman-Singh-14
-Frontend, backend Development: @etarakoem
-Database Optimizer: @mohitramnani
+#### Use Cases and Testing: @Aman-Singh-14
+
+#### Frontend, backend Development: @etarakoem
+
+#### Database Optimizer: @mohitramnani
 
 ## Prerequisites
 
