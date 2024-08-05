@@ -5,7 +5,7 @@ services:
     build:
       context: ./frontend
     ports:
-      - "3000:3000"
+      - "3000:80"
     depends_on:
       - backend
 
@@ -16,16 +16,21 @@ services:
       - "3001:3001"
     depends_on:
       - db
+    environment:
+      DB_HOST: db
+      DB_USER: root
+      DB_PASSWORD: ''
+      DB_NAME: ccps610
 
   db:
     image: mysql:5.7
     environment:
-      MYSQL_ROOT_PASSWORD: ""   # Empty password for root user
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
       MYSQL_DATABASE: ccps610
       MYSQL_USER: user
       MYSQL_PASSWORD: password
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - db_data:/var/lib/mysql
       - ./init-db:/docker-entrypoint-initdb.d
