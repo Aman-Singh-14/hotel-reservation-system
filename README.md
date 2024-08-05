@@ -2,14 +2,44 @@
 
 ## Overview
 
-This project includes a hotel management system with a front-end built in React, a back-end with Node.js, and a MySQL database. The entire setup is containerized using Docker for easy deployment and sharing.
+This project includes a hotel management system with a front-end built in React, a back-end with Node.js, and a MySQL database. 
+The entire setup is containerized using Docker for easy deployment and sharing.
+
+Use Cases and Testing: @Aman-Singh-14
+Frontend, backend Development: @etarakoem
+Database Optimizer: @mohitramnani
 
 ## Prerequisites
 
 - **Docker**: Ensure Docker is installed on your machine. Download and install Docker from [docker.com](https://www.docker.com/get-started).
+- **npm**: If you aren't using Docker, install npm on your machine
 - **Docker Compose**: Comes with Docker Desktop or can be installed separately if needed.
 
-## Setup Instructions
+## npm Setup Instructions:
+
+```
+git clone https://github.com/etarakoem/hotel-reservation-system.git
+```
+
+Require mysql db. The whole db info can be viewed via [hotel-reservation-system/init-db/init.sql](https://github.com/etarakoem/hotel-reservation-system/blob/main/init-db/init.sql)
+
+Run the backend in 1 terminal:
+
+```
+cd hotel-reservation-system/backend
+npm start
+```
+
+Open another terminal to run the frontend:
+
+```
+cd hotel-reservation-system/frontend
+npm start
+```
+
+Checkout the website on `localhost:3000`
+
+## Docker Setup Instructions
 
 ### 1. Download and Extract the Project
 
@@ -70,6 +100,10 @@ docker-compose down
 - **Docker Errors**: If you encounter errors, check the container logs for more details using `docker-compose logs`.
 
 ## Contributing
+
+- Use Cases and Testing: @Aman-Singh-14
+- Frontend, backend Development: @etarakoem
+- Database Optimizer: @mohitramnani
 
 Feel free to contribute to this project by submitting issues or pull requests.
 
